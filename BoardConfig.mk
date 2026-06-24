@@ -130,17 +130,18 @@ BOARD_ROOT_EXTRA_FOLDERS += metadata
 
 # MODULES
 TARGET_RECOVERY_DEVICE_MODULES += \
-#    libkeymaster41 \
-#    libpuresoftkeymasterdevice \
+    android.hardware.keymaster@4.0 \
+    android.hardware.gatekeeper@1.0 \
     ashmemd_aidl_interface-cpp \
     libashmemd_client
 
 # LIBRARIES
 RECOVERY_LIBRARY_SOURCE_FILES += \
-#    $(TARGET_OUT_SHARED_LIBRARIES)/libkeymaster41.so \
-#    $(TARGET_OUT_SHARED_LIBRARIES)/libpuresoftkeymasterdevice.so \
+    $(TARGET_OUT_SHARED_LIBRARIES)/android.hardware.keymaster@4.0.so \
+    $(TARGET_OUT_SHARED_LIBRARIES)/android.hardware.gatekeeper@1.0.so \
     $(TARGET_OUT_SHARED_LIBRARIES)/ashmemd_aidl_interface-cpp.so \
     $(TARGET_OUT_SHARED_LIBRARIES)/libashmemd_client.so
+
 	
 # VERSION
 TW_DEVICE_VERSION := RadGoodNow@4pda and artumes@4pda
@@ -198,4 +199,8 @@ RECOVERY_SDCARD_ON_DATA := true
 BOARD_ROOT_EXTRA_FOLDERS += usb-otg
 # BOARD_ROOT_EXTRA_FOLDERS += external_sd
 
-# unofficialtwrp.com stop stealing our twrp images
+# Encryption AND Decrypt
+TW_INCLUDE_CRYPTO := true
+TW_INCLUDE_CRYPTO_FBE := true
+TW_USE_FSCRYPT_POLICY := 2
+TW_LOG_TO_FILE := true
