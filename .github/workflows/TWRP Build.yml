@@ -134,8 +134,17 @@ jobs:
 
     - name: Sync Device Dependencies
       run: |
-        bash ${GITHUB_WORKSPACE}/scripts/convert.sh ${{ github.event.inputs.DEVICE_PATH }}/${{ steps.buildtree.outputs.value }}.dependencies
-        repo sync -j$(nproc --all)
+        # Проверяем, существует ли скрипт в репозитории экшена
+        if [ -f "${GITHUB_WORKSPACE}/scripts/convert.sh" ]; then
+          echo "Скрипт найден, запускаем конвертацию зависимостей..."
+          # Запускаем скрипт, передавая полный абсолютный путь к файлу зависимостей внутри папки workspace
+          bash "${GITHUB_WORKSPACE}/scripts/convert.sh" "${{ steps.pwd.outputs.workspace-folder }}/${{ github.event.inputs.DEVICE_PATH }}/${{ steps.buildtree.outputs.value }}.dependencies"
+          
+          # Синхронизируем добавленные репозитории
+          repo sync -j$(nproc --all) --force-sync
+        else
+          echo "Предупреждение: скрипт convert.sh не найден по пути ${GITHUB_WORKSPACE}/scripts/. Шаг пропущен."
+        fi
       working-directory: ${{ steps.pwd.outputs.workspace-folder }}
       continue-on-error: true
 
